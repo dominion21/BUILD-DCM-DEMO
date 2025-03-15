@@ -13,7 +13,7 @@ CREATE OR ALTER TABLE authors (
 );
 
 -- Table: Books
-CREATE TABLE books (
+CREATE OR ALTER  TABLE books (
   book_id INT PRIMARY KEY,
   book_title VARCHAR(100),
   author_id INT,
@@ -22,13 +22,13 @@ CREATE TABLE books (
 );
 
 -- Table: Category
-CREATE TABLE category (
+CREATE OR ALTER  TABLE category (
   category_id INT PRIMARY KEY,
   category_name VARCHAR(50)
 );
 
 -- Table: bookCategory
-CREATE TABLE book_category (
+CREATE OR ALTER  TABLE book_category (
   book_id INT,
   category_id INT,
   FOREIGN KEY (book_id) REFERENCES books(book_id),
@@ -65,7 +65,7 @@ ADD publication_year INT;
 
 --Create dummy data
 -- Inserting data into the authors table
-INSERT INTO authors (author_id, author_name) VALUES
+INSERT OVERWRITE INTO authors (author_id, author_name) VALUES
 (1, 'Stephanie Mitchell'),
 (2, 'Paul Turner'),
 (3, 'Julia Martinez'),
@@ -73,7 +73,7 @@ INSERT INTO authors (author_id, author_name) VALUES
 (5, 'Thomas Brown');
 
 -- Inserting data into the books table
-INSERT INTO books (book_id, book_title,author_id, publication_year,rating)
+INSERT OVERWRITE INTO books (book_id, book_title,author_id, publication_year,rating)
 VALUES
 (1, 'Python Crash Course', 1, 2012, 4.5),
 (2, 'Learning React', 2, 2014, 3.7),
@@ -83,7 +83,7 @@ VALUES
 (5, 'Data Science for Business', 5, 2019, 4.2);
 
 -- Inserting data into the category table
-INSERT INTO category (category_id, category_name) VALUES
+INSERT OVERWRITE INTO category (category_id, category_name) VALUES
 (1, 'Programming'),
 (2, 'Machine Learning'),
 (3, 'Data Science'),
@@ -92,7 +92,7 @@ INSERT INTO category (category_id, category_name) VALUES
 (6, 'Computer Science');
 
 -- Inserting data into the book_category table
-INSERT INTO book_category (book_id, category_id) VALUES
+INSERT OVERWRITE INTO book_category (book_id, category_id) VALUES
 (1, 1),
 (2, 1),
 (3, 2),
