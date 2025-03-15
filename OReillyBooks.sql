@@ -6,9 +6,10 @@
 -- Create the tables
 
 -- Table: Authors
-CREATE TABLE authors (
+CREATE OR ALTER TABLE authors (
   author_id INT PRIMARY KEY,
-  author_name VARCHAR(100)
+  author_name VARCHAR(100),
+  Author_address VARCHAR(50)
 );
 
 -- Table: Books
