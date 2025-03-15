@@ -1,0 +1,8 @@
+[connections.default]
+warehouse = "dev_WH"
+role = "ACCOUNTADMIN"
+database = "dev"
+schema = "GIT_INTEGRATION"
+account = "aqb35778.us-east-1"
+user = "love"
+password = "wC6yvG6jJbEtMe8"
