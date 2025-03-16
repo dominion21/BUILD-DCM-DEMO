@@ -1,6 +1,5 @@
 name: Deploy scripts to development
 
-
 on:
   push:
     branches:
@@ -24,14 +23,14 @@ jobs:
           python-version: '3.10'
 
       - name: Install python packages
-        run: pip install -r /snowflake /requirements.txt
+        run: pip install -r snowflake/requirements.txt
 
-  #it would be nice to get rid of this step entirely once SnowCLI supports using only env variables
+      # it would be nice to get rid of this step entirely once SnowCLI supports using only env variables
       - name:  Configure SnowCLI
         env:    
           SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
         run: |
-          cd   $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE
           echo "[connections]" > config.toml
           echo "[connections.dev]"  >> config.toml
           echo "account = \"SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT\""  >> config.toml
@@ -46,5 +45,5 @@ jobs:
           SNOWFLAKE_CONNECTIONS_DEFAULT_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
           SNOWFLAKE_CONNECTIONS_DEFAULT_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
         run: |
-          snow --config-file   $GITHUB_WORKSPACE/snowflake/config.toml sql -q "ALTER GIT REPOSITORY SF_DE FETCH" 
-          snow --config-file   $GITHUB_WORKSPACE/snowflake/config.toml sql -q  "execute immediate from @sf_de/branches/main/OReillyBooks.sql"   
+          snow --config-file $GITHUB_WORKSPACE/snowflake/config.toml sql -q "ALTER GIT REPOSITORY SF_DE FETCH" 
+          snow --config-file $GITHUB_WORKSPACE/snowflake/config.toml sql -q "execute immediate from @sf_de/branches/main/OReillyBooks.sql"
