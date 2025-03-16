@@ -97,5 +97,5 @@ INSERT OVERWRITE INTO book_category (book_id, category_id) VALUES
 (2, 1),
 (3, 2),
 (4, 1),
-(5, 6)
+(5, 6),
 (6, 3);
