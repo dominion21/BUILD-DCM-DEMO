@@ -1,44 +1,50 @@
 name: Deploy scripts to development
 
+
 on:
   push:
     branches:
       - main
 
+  # Allows you to run this workflow manually from the Action tab
+  workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env:
-      SNOWFLAKE_CONNECTIONS_DEFAULT_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-      SNOWFLAKE_CONNECTIONS_DEFAULT_USER: ${{ secrets.SNOWFLAKE_USER }}
-      SNOWFLAKE_CONNECTIONS_DEFAULT_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-      SNOWFLAKE_CONNECTIONS_DEFAULT_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
-      SNOWFLAKE_CONNECTIONS_DEFAULT_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-      SNOWFLAKE_CONNECTIONS_DEFAULT_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
-      SNOWFLAKE_CONNECTIONS_DEFAULT_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
-
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install snowflake-cli
-        uses: Snowflake-Labs/snowflake-cli-action@v1.5
+      - name: Setup Python   
+        uses: actions/setup-python@v4
         with:
-          cli-version: "latest"
-          default-config-file-path: ".snowflake/config.toml"
+          python-version: '3.10'
 
-      - name: Validate Snowflake configuration
+      - name: Install python packages
+        run: pip install =r requirements.txt
+
+  #it would be nice to get rid of this step entirely once SnowCLI supports using only env variables
+      - name:  Configure SnowCLI
+        env:    
+          SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
         run: |
-          snow sql -q "SELECT 1"
-          if [ $? -ne 0 ]; then
-            echo "Snowflake connection configuration failed."
-            exit 1
-          fi
+          cd   $GITHUB_WORKSPACE
+          echo "[connections]" > config.toml
+          echo "[connections.dev]"  >> config.toml
+          echo "account = \"SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT\""  >> config.toml
 
-      - name: Fetch repository changes
-        run: snow git fetch SF_DE
-
-      - name: Deploy scripts to preprod environment
-        run: snow git execute @sf_de/branches/main/OReillyBooks.sql
-            -D "environment='dev'"
+      - name: Deploy demo objects
+        env:
+          SNOWFLAKE_CONNECTIONS_DEFAULT_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_CONNECTIONS_DEFAULT_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_CONNECTIONS_DEFAULT_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          SNOWFLAKE_CONNECTIONS_DEFAULT_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_CONNECTIONS_DEFAULT_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_CONNECTIONS_DEFAULT_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+          SNOWFLAKE_CONNECTIONS_DEFAULT_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+        run: |
+          snow --config-file   $GITHUB_WORKSPACE/snowflake/config.toml sql -q "ALTER GIT REPOSITORY SF_DE FETCH" 
+          snow --config-file   $GITHUB_WORKSPACE/snowflake/config.toml sql -q  "execute immediate from @sf_de/branches/main/OReillyBooks.sql"   
