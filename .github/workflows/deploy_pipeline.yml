@@ -23,7 +23,7 @@ jobs:
         run: |
           pwd
           ls -la .github/workflows
-          ls -la .github/workflows/snowflake
+          
       - name: Install snowflake-cli
         uses: Snowflake-Labs/snowflake-cli-action@v1.5
         with:
@@ -33,11 +33,11 @@ jobs:
         run: |
           pwd
           ls -la .github/workflows
-          ls -la .github/workflows/snowflake
+          
       - name: Print config.toml
-        run: cat .github/workflows/snowflake/config.toml
+        run: cat config.toml
       - name: Fetch repository changes
         run: snow git fetch SF_DE
-      - name: Deploy scripts to preprod environment
+      - name: Deploy scripts to dev environment
         run: snow git execute @sf_de/branches/main/OReillyBooks.sql \
           -D "environment='dev'"
