@@ -23,6 +23,9 @@ jobs:
       - name: Install python packages
         run: pip install -r .github/workflows/requirements.txt
 
+      - name: Install SnowCLI
+        run: pip install snowflake-cli
+
       - name: Configure SnowCLI
         env:    
           SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
