@@ -25,8 +25,8 @@ jobs:
           default-config-file-path: ".snowflake/config.toml"
 
       - name: Fetch repository changes
-        run: snow git fetch my_git_repo
+        run: snow git fetch SF_DE
 
       - name: Deploy scripts to preprod environment
-        run: snow git execute @my_git_repo/branches/main/scripts/* \
-            -D "environment='preprod'"
+        run: snow git execute @sf_de/branches/main/OReillyBooks.sql
+            -D "environment='dev'"
