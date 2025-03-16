@@ -17,13 +17,27 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: List files (before install)
+        run: |
+          pwd
+          ls -la .github/workflows
+          ls -la .github/workflows/snowflake
       - name: Install snowflake-cli
         uses: Snowflake-Labs/snowflake-cli-action@v1.5
         with:
           cli-version: "latest"
           default-config-file-path: ".github/workflows/snowflake/config.toml" # Corrected path
+      - name: List files (after install)
+        run: |
+          pwd
+          ls -la .github/workflows
+          ls -la .github/workflows/snowflake
+      - name: Print config.toml
+        run: cat .github/workflows/snowflake/config.toml
       - name: Fetch repository changes
         run: snow git fetch SF_DE
-      - name: Deploy scripts to dev environment
+      - name: Deploy scripts to preprod environment
         run: snow git execute @sf_de/branches/main/OReillyBooks.sql \
           -D "environment='dev'"
