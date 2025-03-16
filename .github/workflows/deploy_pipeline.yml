@@ -30,7 +30,7 @@ jobs:
 
       - name: Validate Snowflake configuration
         run: |
-          snow conn test
+          snow sql -q "SELECT 1"
           if [ $? -ne 0 ]; then
             echo "Snowflake connection configuration failed."
             exit 1
