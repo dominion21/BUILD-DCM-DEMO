@@ -1,4 +1,4 @@
-name: Deploy scripts to preprod
+name: Deploy scripts to development
 
 on:
   push:
