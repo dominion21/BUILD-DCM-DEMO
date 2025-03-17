@@ -7,30 +7,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install SnowSQL
-      run: |
-        wget https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql -O /usr/local/bin/snowsql
-        chmod +x /usr/local/bin/snowsql
+      - name: Install SnowSQL
+        run: |
+          wget https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql -O /usr/local/bin/snowsql
+          chmod +x /usr/local/bin/snowsql
 
-    - name: Set up Snowflake CLI
-      uses: Snowflake-Labs/snowflake-cli-action@v1
-      with:
-        account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-        username: ${{ secrets.SNOWFLAKE_USERNAME }}
-        password: ${{ secrets.SNOWFLAKE_PASSWORD }}
-        
+      - name: Set up Snowflake CLI
+        uses: Snowflake-Labs/snowflake-cli-action@v1.7 # Or v1.latest
+        with:
+          account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          username: ${{ secrets.SNOWFLAKE_USERNAME }}
+          password: ${{ secrets.SNOWFLAKE_PASSWORD }}
 
-    - name: Deploy to Snowflake
-      env:
-        SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-        SNOWFLAKE_USERNAME: ${{ secrets.SNOWFLAKE_USERNAME }}
-        SNOWFLAKE_REGION: ${{ secrets.SNOWFLAKE_REGION }}
-        SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
-        SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-        SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
-        SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
-      run: |
-        snowsql -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USERNAME -r $SNOWFLAKE_ROLE -W $SNOWFLAKE_WAREHOUSE -D $SNOWFLAKE_DATABASE -f "OReillyBooks.sql"
+      - name: Deploy to Snowflake
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USERNAME: ${{ secrets.SNOWFLAKE_USERNAME }}
+          SNOWFLAKE_REGION: ${{ secrets.SNOWFLAKE_REGION }}
+          SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+          SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+        run: |
+          snowsql -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USERNAME -r $SNOWFLAKE_ROLE -W $SNOWFLAKE_WAREHOUSE -D $SNOWFLAKE_DATABASE -f "OReillyBooks.sql"
