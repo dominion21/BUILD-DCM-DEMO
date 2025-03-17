@@ -17,6 +17,11 @@ jobs:
 
     - name: Set up Snowflake CLI
       uses: Snowflake-Labs/snowflake-cli-action@v1
+      with:
+        account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        username: ${{ secrets.SNOWFLAKE_USERNAME }}
+        password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        
 
     - name: Deploy to Snowflake
       env:
