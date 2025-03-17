@@ -1,32 +1,31 @@
 name: Deploy to Snowflake
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Install Snowflake CLI
-        uses: Snowflake-Labs/snowflake-cli-action@v1
-        with:
-          cli-version: "latest"
-          default-config-file-path: "config.toml"
+    - name: Install SnowSQL
+      run: |
+        wget https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql -O /usr/local/bin/snowsql
+        chmod +x /usr/local/bin/snowsql
 
-      - name: Deploy scripts
-        run: |
-          snow git fetch SF_DE
-          snow git execute @sf_de/branches/main/OReillyBooks.sql -D "environment='dev'"
-        env:
-          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
-          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-          SNOWFLAKE_CONNECTIONS_DEFAULT_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
-          SNOWFLAKE_CONNECTIONS_DEFAULT_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-          SNOWFLAKE_CONNECTIONS_DEFAULT_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
-          SNOWFLAKE_CONNECTIONS_DEFAULT_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+    - name: Set up Snowflake CLI
+      uses: Snowflake-Labs/snowflake-cli-action@v1
+
+    - name: Deploy to Snowflake
+      env:
+        SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        SNOWFLAKE_USERNAME: ${{ secrets.SNOWFLAKE_USERNAME }}
+        SNOWFLAKE_REGION: ${{ secrets.SNOWFLAKE_REGION }}
+        SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+        SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+        SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+        SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+      run: |
+        snowsql -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USERNAME -r $SNOWFLAKE_ROLE -W $SNOWFLAKE_WAREHOUSE -D $SNOWFLAKE_DATABASE -f "OReillyBooks.sql"
