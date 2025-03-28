@@ -46,5 +46,5 @@ jobs:
           SNOWFLAKE_CONNECTIONS_DEV_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
           SNOWFLAKE_CONNECTIONS_DEV_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
         run: |
-          snow --config-file   $GITHUB_WORKSPACE/config.toml sql -q "ALTER GIT REPOSITORY demo_repo FETCH" 
-          snow --config-file   $GITHUB_WORKSPACE/config.toml sql -q  "demo_repo/branches/dev/.github/workflows/scripts/02_execute_immediate.sql"  
+          snow --config-file  config.toml sql -q "ALTER GIT REPOSITORY demo_repo FETCH" 
+          snow --config-file  config.toml sql -q  "demo_repo/branches/dev/.github/workflows/scripts/02_execute_immediate.sql"  
