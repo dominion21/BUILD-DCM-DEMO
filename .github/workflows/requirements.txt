@@ -1,2 +1,2 @@
-Snowflake
-SnowflakeCLI
+snowflake
+snowflake-cli
