@@ -3,7 +3,7 @@ create or alter schema GIT_INTEGRATION;
 create secret GIT_SECRET
   type = password
   username = dominion21
-  password = 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    
+  password = ghp_yWJ2qcrak4rh7D
 ;
 
 -- use the ACCOUNTADMIN role to create an API integration to keep the exercise simple
