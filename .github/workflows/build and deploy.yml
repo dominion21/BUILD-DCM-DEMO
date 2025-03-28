@@ -24,7 +24,7 @@ jobs:
           python-version: '3.10'
 
       - name: Install python packages
-        run: pip install -r requirements.txt
+        run: pip install -r .github/workflows/requirements.txt
 
   #it would be nice to get rid of this step entirely once SnowCLI supports using only env variables
       - name:  Configure SnowCLI
@@ -32,9 +32,9 @@ jobs:
           SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
         run: |
           cd   $GITHUB_WORKSPACE
-          echo "[connections]" > config.toml
-          echo "[connections.dev]"  >> config.toml
-          echo "account = \"SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT\""  >> config.toml
+          echo "[connections]" > .github/workflows/config.toml
+          echo "[connections.dev]"  >> .github/workflows/config.toml
+          echo "account = \"SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT\""  >> .github/workflows/config.toml
 
       - name: Deploy demo objects
         env:
