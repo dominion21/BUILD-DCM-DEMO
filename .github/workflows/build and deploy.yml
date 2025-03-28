@@ -30,11 +30,23 @@ jobs:
       - name:  Configure SnowCLI
         env:    
           SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_CONNECTIONS_DEV_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_CONNECTIONS_DEV_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          SNOWFLAKE_CONNECTIONS_DEV_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_CONNECTIONS_DEV_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_CONNECTIONS_DEV_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+          SNOWFLAKE_CONNECTIONS_DEV_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
         run: |
           cd   $GITHUB_WORKSPACE
           echo "[connections]" > config.toml
           echo "[connections.dev]"  >> config.toml
           echo "account = \"SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT\""  >> config.toml
+          echo "account = \"SNOWFLAKE_CONNECTIONS_DEV_USER\""  >> config.toml
+          echo "account = \"SNOWFLAKE_CONNECTIONS_DEV_PASSWORD\""  >> config.toml
+          echo "account = \"SNOWFLAKE_CONNECTIONS_DEV_DATABASE\""  >> config.toml
+          echo "account = \"SNOWFLAKE_CONNECTIONS_DEV_WAREHOUSE\""  >> config.toml
+          echo "account = \"SNOWFLAKE_CONNECTIONS_DEV_ROLE\""  >> config.toml
+          echo "account = \"SNOWFLAKE_CONNECTIONS_DEV_SCHEMA\""  >> config.toml
 
       - name: Deploy demo objects
         env:
