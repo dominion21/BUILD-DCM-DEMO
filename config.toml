@@ -1,0 +1,8 @@
+[connections.default]
+warehouse = "COMPUTE_WH"
+role = "ACCOUNTADMIN"
+database = "DevOps"
+schema = "STG"
+account = "twb64698.us-east-1"
+user = "MK"
+password = "tP3sYCT2gC5JqV6"
