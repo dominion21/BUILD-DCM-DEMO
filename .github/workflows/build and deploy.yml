@@ -39,15 +39,15 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           config_content=$(cat <<EOF
-          echo "[connections]" > config.toml
-          echo "[connections.dev]" >> config.toml
-          echo "account = \"${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT }}\"" >> config.toml
-          echo "user = \"${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_USER }}\"" >> config.toml
-          echo "password = \"${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_PASSWORD }}\"" >> config.toml
-          echo "database = \"${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_DATABASE }}\"" >> config.toml
-          echo "warehouse = \"${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_WAREHOUSE }}\"" >> config.toml
-          echo "role = \"${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_ROLE }}\"" >> config.toml
-          echo "schema = \"${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_SCHEMA }}\"" >> config.toml
+          [connections]
+          [connections.dev]
+          account = "${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_ACCOUNT }}"
+          user = "${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_USER }}"
+          password = "${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_PASSWORD }}"
+          database = "${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_DATABASE }}"
+          warehouse = "${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_WAREHOUSE }}"
+          role = "${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_ROLE }}"
+          schema = "${{ secrets.SNOWFLAKE_CONNECTIONS_DEV_SCHEMA }}"
           EOF
           )
             echo "$config_content" > config.toml
